@@ -5,6 +5,7 @@ import {Cell} from "../models/Cell";
 import {Player} from "../models/Players";
 import {Colors} from "../models/Colors";
 import CellWhiteComponent from "./CellWhiteComponent";
+import {useEat} from "../hooks/useEat";
 
 interface BoardComponentProps {
     board: Board,
@@ -14,11 +15,18 @@ interface BoardComponentProps {
 }
 
 const BoardComponent: FC<BoardComponentProps> = ({board, setBoard, swapPlayer, currentPlayer}) => {
-    const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
-    const [cellNeed, setCellNeed] = useState<Cell[] | null>()
 
-    const [isNeedYet, setIsNeedYet] = useState<boolean>(false)
-    const [isOneEat, setIsOneEat] = useState<boolean>(false)
+
+    const {
+        selectedCell,
+        isNeedYet,
+        isOneEat,
+        cellNeed,
+        click,
+        setCellNeed,
+        setIsNeedYet,
+        setIsOneEat
+    } = useEat(board,swapPlayer,currentPlayer)
 
     useEffect(() => {
         highLightCells()
@@ -30,29 +38,7 @@ const BoardComponent: FC<BoardComponentProps> = ({board, setBoard, swapPlayer, c
         setIsOneEat(false)
     }, [currentPlayer, isNeedYet])
 
-    const click = (cell: Cell) => {
-        if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
-            selectedCell.moveFigure(cell)
-            if (board.isNeed(cell as Cell) && isOneEat) {
-                setIsNeedYet(true)
-                setSelectedCell(null)
-            } else {
-                swapPlayer()
-                setSelectedCell(null)
-            }
-        } else if (!(cellNeed as Cell[]).length
-            && cell.figure
-            && cell.figure.color === currentPlayer?.color) {
-            setSelectedCell(cell)
-        } else if ((cellNeed as Cell[]).length) {
-            (cellNeed as Cell[]).forEach(item => {
-                if (cell === item) {
-                    setSelectedCell(cell)
-                    setIsOneEat(true)
-                }
-            })
-        }
-    }
+
 
     function highLightCells() {
         board.highLightCells(selectedCell)
