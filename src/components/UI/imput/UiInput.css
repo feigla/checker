@@ -1,0 +1,8 @@
+.ui__input {
+    padding: 10px;
+    background-color: transparent;
+    color: black;
+    border: 1px solid #106cab;
+    font-size: 1.2rem;
+    width: 300px;
+}

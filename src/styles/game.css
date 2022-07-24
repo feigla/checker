@@ -1,0 +1,110 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 64px);
+    grid-template-rows: repeat(8, 64px);
+    width: calc((8 * 64px) + 2px);
+    height: calc((8 * 64px) + 2px);
+    border: 1px solid #023857;
+    box-shadow: 0 0 3px #106cab;
+}
+
+@media (max-width: 540px) {
+    .board {
+        width: calc((8 * 58px) + 2px);
+        height: calc((8 * 58px) + 2px);
+        grid-template-columns: repeat(8, 58px);
+        grid-template-rows: repeat(8, 58px);
+    }
+    .checker {
+        height: 58px;
+        width: 58px;
+    }
+}
+@media (max-width: 480px) {
+    .board {
+        width: calc((8 * 52px) + 2px);
+        height: calc((8 * 52px) + 2px);
+        grid-template-columns: repeat(8, 52px);
+        grid-template-rows: repeat(8, 52px);
+    }
+    .checker {
+        height: 52px;
+        width: 52px;
+    }
+}
+@media (max-width: 440px) {
+    .board {
+        width: calc((8 * 46px) + 2px);
+        height: calc((8 * 46px) + 2px);
+        grid-template-columns: repeat(8, 46px);
+        grid-template-rows: repeat(8, 46px);
+    }
+    .checker {
+        height: 46px;
+        width: 46px;
+    }
+}
+@media (max-width: 380px) {
+    .board {
+        width: calc((8 * 40px) + 2px);
+        height: calc((8 * 40px) + 2px);
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: repeat(8, 40px);
+    }
+    .checker {
+        height: 40px;
+        width: 40px;
+    }
+}
+@media (max-width: 330px) {
+    .board {
+        width: calc((8 * 34px) + 2px);
+        height: calc((8 * 34px) + 2px);
+        grid-template-columns: repeat(8, 34px);
+        grid-template-rows: repeat(8, 34px);
+    }
+    .checker {
+        height: 34px;
+        width: 34px;
+    }
+}
+
+.rotateBoard {
+    transform: rotate(180deg);
+}
+.black {
+    background-color: #106cab;
+}
+.white {
+    background-color: #a2d1ff;
+}
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.selected {
+    background-color: rgb(12, 150, 197);
+    box-shadow: 0 0 5px rgb(12, 150, 197);
+}
+.opened{
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: rgba(1, 167, 222, 0.74);
+    box-shadow: 0 0 5px rgba(1, 167, 222, 0.74);
+}
+.hoveringDrop {
+    background-color: rgb(1, 167, 222);
+    box-shadow: 0 0 2px rgb(0, 176, 232);
+}
+.hovering:hover {
+    background-color: rgb(1, 167, 222);
+    box-shadow: 0 0 2px rgb(0, 176, 232);
+}

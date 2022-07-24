@@ -29,7 +29,7 @@ export class Board {
     public addPawns() {
         for (let i = 0; i < 8; i++) {
             for (let j = i % 2 == 0 ? 1 : 0; j < 8; j = j + 2) {
-                if (i < 3) {
+                if (i < 3 ) {
                     new Checker(this.getCell(i, j), Colors.BLACK)
                 }
                 if (i > 4) {
@@ -55,7 +55,7 @@ export class Board {
         }
     }
 
-    public isNeed(selectedCell: Cell) {
+    public isRequired(selectedCell: Cell) {
         for (let i = 0; i < this.cells.length; i++) {
             const row = this.cells[i]
             for (let j = i % 2 == 0 ? 1 : 0; j < row.length; j = j + 2) {
@@ -66,27 +66,27 @@ export class Board {
                     && !!selectedCell?.figure?.moveCheckerNeed(target)) return true;
                 if (selectedCell.figure?.logo === checkerWhiteKing
                     && !target.figure
-                    && !!selectedCell?.isEmptyDiagonalNeed(target)) return true;
+                    && !!selectedCell?.isEmptyDiagonalOfRequiredCells(target)) return true;
                 if (selectedCell.figure?.logo === checkerBlackKing
                     && !target.figure
-                    && !!selectedCell?.isEmptyDiagonalNeed(target)) return true;
+                    && !!selectedCell?.isEmptyDiagonalOfRequiredCells(target)) return true;
             }
         }
         return false
     }
 
-    public isCellKingNeed(selectedCell: Cell, dx: number, dy: number, currentFigure: Figure) {
+    public isRequiredCellOfKing(selectedCell: Cell, dx: number, dy: number, currentFigure: Figure) {
         for (let i = 0; i < this.cells.length; i++) {
             const row = this.cells[i]
             for (let j = i % 2 == 0 ? 1 : 0; j < row.length; j = j + 2) {
                 const target = row[j]
-                if (selectedCell.isEmptyDiagonalCellKingNeed(target, dx, dy, currentFigure)) return true;
+                if (selectedCell.isEmptyDiagonalOfRequiredKingCells(target, dx, dy, currentFigure)) return true;
             }
         }
         return false
     }
 
-    public getArrayCellKingNeed(selectedCell: Cell): Cell[] {
+    public getRequiredCellsOfKing(selectedCell: Cell): Cell[] {
         const arr: Cell[] = []
         for (let i = 0; i < this.cells.length; i++) {
             const row = this.cells[i]
@@ -94,12 +94,12 @@ export class Board {
                 const target = row[j]
                 if (selectedCell.figure?.logo === checkerWhiteKing
                     && !target.figure
-                    && !!selectedCell?.checkCellKingNeed(target)) {
+                    && !!selectedCell?.checkRequiredCellOfKing(target)) {
                     arr.push(target)
                 }
                 if (selectedCell.figure?.logo === checkerBlackKing
                     && !target.figure
-                    && !!selectedCell?.checkCellKingNeed(target)) {
+                    && !!selectedCell?.checkRequiredCellOfKing(target)) {
                     arr.push(target)
                 }
             }
@@ -107,13 +107,13 @@ export class Board {
         return arr
     }
 
-    public checkNeeded(currentColor: Colors): Cell[] {
+    public getRequiredCells(currentColor: Colors): Cell[] {
         let arr = []
         for (let i = 0; i < this.cells.length; i++) {
             const row = this.cells[i]
             for (let j = i % 2 == 0 ? 1 : 0; j < row.length; j = j + 2) {
                 const target = row[j]
-                if (target.figure?.color === currentColor && this.isNeed(target)) {
+                if (target.figure?.color === currentColor && this.isRequired(target)) {
                     arr.push(target)
                 }
             }

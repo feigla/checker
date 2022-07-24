@@ -15,20 +15,23 @@ export class Checker extends Figure {
     canMove(target: Cell): boolean {
         if(!super.canMove(target)) return false;
 
-        if (this.logo !== checkerBlackKing && this.logo !== checkerWhiteKing && this.cell.board.isNeed(this.cell as Cell) && this.moveCheckerNeed(target))
+        if (this.logo !== checkerBlackKing
+            && this.logo !== checkerWhiteKing
+            && this.cell.board.isRequired(this.cell as Cell)
+            && this.moveCheckerNeed(target))
             return true;
-        if (!this.cell.board.isNeed(this.cell as Cell) && this.cell.moveChecker(target))
+        if (!this.cell.board.isRequired(this.cell as Cell) && this.cell.moveChecker(target))
             return true;
 
         if (this.logo === checkerWhiteKing
-            && !this.cell.board.isNeed(this.cell as Cell)
+            && !this.cell.board.isRequired(this.cell as Cell)
             && this.cell.isEmptyDiagonal(target)) return true;
         if (this.logo === checkerBlackKing
-            && !this.cell.board.isNeed(this.cell as Cell)
+            && !this.cell.board.isRequired(this.cell as Cell)
             && this.cell.isEmptyDiagonal(target)) return true;
 
-        if (this.logo === checkerWhiteKing && this.cell.isEmptyDiagonalNeed(target)) return true;
-        return this.logo === checkerBlackKing && this.cell.isEmptyDiagonalNeed(target);
+        if (this.logo === checkerWhiteKing && this.cell.isEmptyDiagonalOfRequiredCells(target)) return true;
+        return this.logo === checkerBlackKing && this.cell.isEmptyDiagonalOfRequiredCells(target);
     }
 
     moveCheckerNeed(target: Cell): boolean {

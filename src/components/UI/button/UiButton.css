@@ -1,0 +1,11 @@
+.ui__button {
+    transition: all 200ms ease-in;
+    cursor: pointer;
+    font-size: 1.1rem;
+    background: #106cab;
+    color: #fff;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    padding: 10px;
+    max-width: 100px;
+}

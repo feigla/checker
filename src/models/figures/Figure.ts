@@ -36,7 +36,7 @@ export class Figure {
             }
         }
         if (this.logo === checkerWhiteKing || this.logo === checkerBlackKing) {
-            const [dy, dx, absY] = this.cell.getDiagonalVal(target)
+            const [dy, dx, absY] = this.cell.getDiagonalVar(target)
 
             for (let i = 1; i < absY; i++) {
                 if (this.cell.isEnemy(this.cell.board.getCell(this.cell.y + dy * i, this.cell.x + dx * i))) {

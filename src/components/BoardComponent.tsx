@@ -1,44 +1,29 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Board} from "../models/Board";
 import CellBlackComponent from "./CellBlackComponent";
-import {Cell} from "../models/Cell";
 import {Player} from "../models/Players";
 import {Colors} from "../models/Colors";
 import CellWhiteComponent from "./CellWhiteComponent";
-import {useEat} from "../hooks/useEat";
+import {useCell} from "../hooks/useCell";
+import sessions from "../store/sessions";
+import {observer} from "mobx-react-lite";
+import {useSocket} from "../hooks/useSocket";
 
 interface BoardComponentProps {
     board: Board,
     setBoard: (board: Board) => void
     currentPlayer: Player | null
-    swapPlayer: () => void
+    setCurrentPlayer: (Player: Player) => void
 }
 
-const BoardComponent: FC<BoardComponentProps> = ({board, setBoard, swapPlayer, currentPlayer}) => {
+const BoardComponent: FC<BoardComponentProps> = observer(({board, setBoard, currentPlayer, setCurrentPlayer}) => {
+    const {selectedCell, click, setSelectedCell, setStillRequiredMove,} = useCell(board, currentPlayer)
 
-
-    const {
-        selectedCell,
-        isNeedYet,
-        isOneEat,
-        cellNeed,
-        click,
-        setCellNeed,
-        setIsNeedYet,
-        setIsOneEat
-    } = useEat(board,swapPlayer,currentPlayer)
+    useSocket(board, setStillRequiredMove, setSelectedCell, setCurrentPlayer)
 
     useEffect(() => {
         highLightCells()
     }, [selectedCell])
-
-    useEffect(() => {
-        setCellNeed(board.checkNeeded(currentPlayer?.color as Colors))
-        setIsNeedYet(false)
-        setIsOneEat(false)
-    }, [currentPlayer, isNeedYet])
-
-
 
     function highLightCells() {
         board.highLightCells(selectedCell)
@@ -51,7 +36,7 @@ const BoardComponent: FC<BoardComponentProps> = ({board, setBoard, swapPlayer, c
     }
 
     return (
-        <div className='board'>
+        <div className={['board', sessions.isSideBlack ? 'rotateBoard' : ' ' ].join(' ')}>
             {board.cells.map((row, ind) =>
                 <React.Fragment key={ind}>
                     {row.map((cell, ind) =>
@@ -63,9 +48,9 @@ const BoardComponent: FC<BoardComponentProps> = ({board, setBoard, swapPlayer, c
                                     key={cell.id}
                                     selected={cell.x === selectedCell?.x && cell.y === selectedCell?.y}
                                     click={click}
-                                    currentPlayer={currentPlayer}
                                 />
-                                : <CellWhiteComponent
+                                :
+                                <CellWhiteComponent
                                     key={cell.id}
                                 />
                             }
@@ -75,6 +60,6 @@ const BoardComponent: FC<BoardComponentProps> = ({board, setBoard, swapPlayer, c
             )}
         </div>
     );
-}
+})
 
 export default BoardComponent;

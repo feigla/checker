@@ -33,7 +33,7 @@ export class Cell {
         return this.figure === null
     }
 
-    public getDiagonalVal (target: Cell) {
+    public getDiagonalVar (target: Cell) {
         const absX = Math.abs(target.x - this.x);
         const absY = Math.abs(target.y - this.y);
         const dy = this.y < target.y ? 1 : -1
@@ -42,7 +42,7 @@ export class Cell {
     }
 
     public checkEmptyDiagonal (target: Cell): boolean {
-        const [dy, dx, absX, absY] = this.getDiagonalVal(target)
+        const [dy, dx, absX, absY] = this.getDiagonalVar(target)
         if (absY !== absX) return false;
 
         for (let i = 1; i < absY; i++) {
@@ -60,17 +60,17 @@ export class Cell {
         return this.checkEmptyDiagonal(target)
     }
 
-    isEmptyDiagonalNeed(target: Cell): boolean {
-        const [dy, dx, absY] = this.getDiagonalVal(target)
+    isEmptyDiagonalOfRequiredCells(target: Cell): boolean {
+        const [dy, dx, absY] = this.getDiagonalVar(target)
         if (!this.checkEmptyDiagonal(target)) return false;
 
         for (let i = 1; i < absY; i++) {
             if (this.isEnemy(this.board.getCell(this.y + dy * i, this.x + dx * i))) {
                 let arr: Cell[] = []
-                this.board.getArrayCellKingNeed(this).forEach(item => {
+                this.board.getRequiredCellsOfKing(this).forEach(item => {
                     if (item !== target
-                        && this.board.isCellKingNeed(item, dx, dy, (this.figure as Figure))
-                        && !this.board.isCellKingNeed(target, dx, dy, (this.figure as Figure))) {
+                        && this.board.isRequiredCellOfKing(item, dx, dy, (this.figure as Figure))
+                        && !this.board.isRequiredCellOfKing(target, dx, dy, (this.figure as Figure))) {
                         arr.push(target)
                     }
                 })
@@ -80,8 +80,8 @@ export class Cell {
         return false;
     }
 
-    checkCellKingNeed(target: Cell): boolean {
-        const [dy, dx, absY] = this.getDiagonalVal(target)
+    checkRequiredCellOfKing(target: Cell): boolean {
+        const [dy, dx, absY] = this.getDiagonalVar(target)
         if (!this.checkEmptyDiagonal(target)) return false;
 
         for (let i = 1; i < absY; i++) {
@@ -92,8 +92,8 @@ export class Cell {
         return false;
     }
 
-    isEmptyDiagonalCellKingNeed(target: Cell, dxPast: number, dyPast: number, currentFigure: Figure): boolean {
-        const [dy, dx, absX, absY] = this.getDiagonalVal(target)
+    isEmptyDiagonalOfRequiredKingCells(target: Cell, dxPast: number, dyPast: number, currentFigure: Figure): boolean {
+        const [dy, dx, absX, absY] = this.getDiagonalVar(target)
         if (absY !== absX) return false;
         if (dxPast !== dyPast && dx !== dy) return false;
         if (dxPast === dyPast && dx === dy) return false;
@@ -116,15 +116,14 @@ export class Cell {
         const direction = this.figure?.color === Colors.WHITE ? -1 : 1
         if (this.x + 1 == target.x && this.y + direction == target.y) return true;
         return this.x - 1 == target.x && this.y + direction == target.y;
-
     }
 
-    setFigure(figure: Figure) {
+    setChecker(figure: Figure) {
         this.figure = figure
         this.figure.cell = this
     }
 
-    setFigureKing(figure: Figure, currentColor: Colors) {
+    setKing(figure: Figure, currentColor: Colors) {
         this.figure = figure
         this.figure.logo = currentColor === Colors.BLACK ? checkerBlackKing : checkerWhiteKing
         this.figure.cell = this
@@ -134,11 +133,11 @@ export class Cell {
         if (this.figure && this.figure?.canMove(target)) {
             this.figure.moveFigureNeed(target)
             if (target.y === 0 && this.figure.color === Colors.WHITE) {
-                target.setFigureKing(this.figure, Colors.WHITE)
+                target.setKing(this.figure, Colors.WHITE)
             } else if (target.y === 7 && this.figure.color === Colors.BLACK) {
-                target.setFigureKing(this.figure, Colors.BLACK)
+                target.setKing(this.figure, Colors.BLACK)
             } else {
-                target.setFigure(this.figure)
+                target.setChecker(this.figure)
             }
             this.figure = null
         }
